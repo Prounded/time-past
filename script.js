@@ -1,4 +1,4 @@
-const START_DATE = new Date("July 07, 2024 00:00:00");
+const START_DATE = new Date("07 July, 2024 00:00:00");
 
 document.getElementById('details').style.visibility = 'hidden';
 document.getElementById('loader').style.visibility = 'visible';
@@ -14,8 +14,39 @@ function setTime() {
     let years = 0;
     let totalDays = 0;
 
-    const allData = [second, minute, hours, days, months, years];
+    function monthSettings() {
+        const START_YEAR = START_DATE.getFullYear();
+        const END_YEAR = NOW_DATE.getFullYear();
+        const REPEAT = END_YEAR - START_YEAR;
+        const dayMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        let currentMonth = START_DATE.getMonth();
+        i = 0;
 
+        for (i; i <= REPEAT; i++){
+            let leapYear = false;
+            if ((START_YEAR + i) % 4 === 0) {
+                leapYear = true;
+            }
+            else {
+                leapYear = false;
+            }
+            
+            while (currentMonth <= 11 && days >= dayMonths[currentMonth]) {
+                if (currentMonth === 1 && leapYear === true) {
+                    days -= dayMonths[currentMonth] + 1;
+                    currentMonth++;
+                    months++;
+                }
+                else {
+                    days -= dayMonths[currentMonth];
+                    currentMonth++;
+                    months++;
+                }
+            }
+
+            currentMonth = 0;
+        }
+    }
     while (second >= 60) {
         second -= 60;
         minute++;
@@ -30,8 +61,7 @@ function setTime() {
         totalDays++;
     }
     while (days >= 30) {
-        days -= 30;
-        months++;
+        monthSettings();
     }
     while (months >= 12) {
         months -= 12;
